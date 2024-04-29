@@ -1,4 +1,5 @@
 use anyhow::Result;
+use clap::Parser;
 use embedded_graphics::{
     mono_font::{ascii::FONT_5X8, ascii::FONT_6X10, MonoTextStyleBuilder},
     pixelcolor::BinaryColor,
@@ -10,8 +11,19 @@ use ssd1306_i2c::{prelude::*, Builder};
 use std::time::Duration;
 use tokio::sync::mpsc;
 
-const IP_ADDR: &str = "10.5.0.119";
-const REFRESH_RATE: u64 = 500;
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// Name of the person to greet
+    #[arg(long, default_value = "127.0.0.1")]
+    ip: String,
+
+    #[arg(long, default_value = "/dev/i2c-0")]
+    i2c_port: String,
+
+    #[arg(long, default_value_t = 500)]
+    refresh_rate: u64,
+}
 
 #[derive(Debug)]
 struct ScreenInfo {
@@ -23,7 +35,9 @@ struct ScreenInfo {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let dev = I2cdev::new("/dev/i2c-0")?;
+    let args = Args::parse();
+
+    let dev = I2cdev::new(args.i2c_port)?;
 
     let mut display: GraphicsMode<_> = Builder::new()
         .with_size(DisplaySize::Display128x64NoOffset)
@@ -55,7 +69,7 @@ async fn main() -> Result<()> {
             let mut hr = 0.0;
             let mut power = 0.0;
             let mut ip = "N/A".to_string();
-            tokio::time::sleep(Duration::from_millis(REFRESH_RATE)).await;
+            tokio::time::sleep(Duration::from_millis(args.refresh_rate)).await;
             let Ok(client) = reqwest::Client::builder()
                 .timeout(Duration::from_millis(500))
                 .build()
@@ -63,7 +77,7 @@ async fn main() -> Result<()> {
                 continue;
             };
             let Ok(summary) = client
-                .get(format!("http://{}:4028/summary", IP_ADDR))
+                .get(format!("http://{}:4028/summary", args.ip))
                 .send()
                 .await
             else {
@@ -71,7 +85,7 @@ async fn main() -> Result<()> {
             };
 
             let Ok(network) = client
-                .get(format!("http://{}:4028/network", IP_ADDR))
+                .get(format!("http://{}:4028/network", args.ip))
                 .send()
                 .await
             else {
