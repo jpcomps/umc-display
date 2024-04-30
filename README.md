@@ -14,13 +14,14 @@ https://github.com/cross-rs/cross
 Use cross to compile for UMC arch: 
 ```cross build --target armv7-unknown-linux-gnueabihf --release```
 
-
+```
 Usage: umc-display [OPTIONS]
 
 Options:
-      --ip <IP>                      Name of the person to greet [default: 127.0.0.1]
+      --ip <IP>                      [default: 127.0.0.1]
       --i2c-port <I2C_PORT>          [default: /dev/i2c-0]
       --refresh-rate <REFRESH_RATE>  [default: 500]
   -h, --help                         Print help
   -V, --version                      Print version
 
+```
