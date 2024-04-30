@@ -14,7 +14,6 @@ use tokio::sync::mpsc;
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// Name of the person to greet
     #[arg(long, default_value = "127.0.0.1")]
     ip: String,
 
