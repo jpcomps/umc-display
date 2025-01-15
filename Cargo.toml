@@ -6,17 +6,17 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ssd1306-i2c = "0.1.4"
-anyhow = "1.0.82"
+ssd1306-i2c = "0.1.5"
+anyhow = "1.0.95"
 embedded-graphics = "0.8.1"
-embedded-graphics-simulator = "0.6.0"
-reqwest = { version = "0.12.4", features = ["json"] }
-serde_json = "1.0.116"
-tokio = { version = "1.37.0", features = ["full"] }
+embedded-graphics-simulator = "0.7.0"
+reqwest = { version = "0.12.12", features = ["json"] }
+serde_json = "1.0.135"
+tokio = { version = "1.43.0", features = ["full"] }
 embedded-hal = "1.0.0"
 linux-embedded-hal = "0.4.0"
-clap = { version = "4.5.4", features = ["derive"] }
+clap = { version = "4.5.26", features = ["derive"] }
 
 [dependencies.openssl]
-version = "0.10"
+version = "0.10.68"
 features = ["vendored"]
